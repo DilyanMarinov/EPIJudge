@@ -3,10 +3,25 @@ import functools
 from test_framework import generic_test
 from test_framework.test_utils import enable_executor_hook
 
+class BinaryTreeNode():
+
+    def __init__(self, data=None, left=None, right=None):
+        self.data = data
+        self.left = left
+        self.right = right
 
 def reconstruct_preorder(preorder):
-    # TODO - you fill in here.
-    return None
+    return reconstruct_rec(iter(preorder))
+
+
+def reconstruct_rec(iterator):
+    value = next(iterator)
+    if value == None:
+        return None
+
+    left = reconstruct_rec(iterator)
+    right = reconstruct_rec(iterator)
+    return BinaryTreeNode(value, left, right)
 
 
 @enable_executor_hook
