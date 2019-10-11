@@ -11,10 +11,15 @@ class BinaryTreeNode:
         self.right = None
         self.next = None  # Populates this field.
 
-
-def construct_right_sibling(tree):
-    # TODO - you fill in here.
-    return
+def construct_right_sibling(root):
+    if root == None:
+        return
+    if root.left:
+        root.left.next = root.right
+    if root.right and root.next:
+        root.right.next = root.next.left
+    construct_right_sibling(root.left)
+    construct_right_sibling(root.right)
 
 
 def traverse_next(node):
