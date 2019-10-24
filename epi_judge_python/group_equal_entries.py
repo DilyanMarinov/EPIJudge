@@ -9,7 +9,15 @@ Person = collections.namedtuple('Person', ('age', 'name'))
 
 
 def group_by_age(people):
-    # TODO - you fill in here.
+    ages = {}
+    for person in people:
+        if person[0] in ages:
+            ages[person[0]].append(person)
+        else:
+            ages[person[0]] = [person]
+    people.clear()
+    for group in ages.values():
+        people.extend(group)
     return
 
 
