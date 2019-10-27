@@ -6,8 +6,25 @@ from test_framework.test_utils import enable_executor_hook
 
 
 def gray_code(num_bits):
-    # TODO - you fill in here.
-    return []
+    if num_bits == 0:
+        return [0]
+    masks = set([2**x for x in range(num_bits)])
+    return gray_rec(masks, [0], set([0]))
+
+
+def gray_rec(masks, temp, seen):
+    if len(temp) == 2**len(masks) and temp[-1] in masks:
+        return temp
+    for mask in masks:
+        cand = temp[-1] ^ mask
+        if cand not in seen:
+            temp.append(cand)
+            seen.add(cand)
+            result = gray_rec(masks, temp, seen)
+            if result != None:
+                return result
+            seen.discard(cand)
+            del temp[-1]
 
 
 @enable_executor_hook

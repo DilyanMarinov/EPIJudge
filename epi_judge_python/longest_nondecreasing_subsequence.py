@@ -2,8 +2,11 @@ from test_framework import generic_test
 
 
 def longest_nondecreasing_subsequence_length(A):
-    # TODO - you fill in here.
-    return 0
+    lens = [0] * len(A)
+    for i in range(len(A)):
+        lens[i] = 1 + max((lens[j]
+                           for j in range(i) if A[j] <= A[i]), default=0)
+    return max(lens)
 
 
 if __name__ == '__main__':
