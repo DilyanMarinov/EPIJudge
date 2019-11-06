@@ -4,10 +4,24 @@ from test_framework import generic_test
 from test_framework.test_utils import enable_executor_hook
 
 
-# Assume s is a string encoded as bytearray.
 def reverse_words(s):
-    # TODO - you fill in here.
-    return
+    reverse_range(s, 0, len(s) - 1)
+    start = 0
+    finish = 0
+    while finish < len(s):
+        while finish < len(s) and s[finish] != 32:
+            finish += 1
+        reverse_range(s, start, finish - 1)
+        finish += 1
+        start = finish
+
+
+def reverse_range(b, i, j):
+    mid = i + (j - i)//2
+    while i <= mid and j >= mid:
+        b[i], b[j] = b[j], b[i]
+        i += 1
+        j -= 1
 
 
 @enable_executor_hook

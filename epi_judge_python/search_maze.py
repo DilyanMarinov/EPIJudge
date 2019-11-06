@@ -1,4 +1,5 @@
-import collections
+from collections import namedtuple
+from collections import deque
 import copy
 import functools
 
@@ -8,12 +9,44 @@ from test_framework.test_utils import enable_executor_hook
 
 WHITE, BLACK = range(2)
 
-Coordinate = collections.namedtuple('Coordinate', ('x', 'y'))
-
-
+Coordinate = namedtuple('Coordinate', ('x', 'y'))
 def search_maze(maze, s, e):
-    # TODO - you fill in here.
+    return search_maze_copy(copy.deepcopy(maze), s, e)
+
+def search_maze_copy(maze, s, e):
+    q = deque()
+    q.appendleft(s)
+    rows = len(maze)
+    cols = len(maze[0])
+    prev = {(s.x, s.y): None}
+    while len(q) > 0:
+        current = q.pop()
+        maze[current.x][current.y] = BLACK
+        i, j = current.x, current.y
+        if current.x == e.x and current.y == e.y:
+            return reconstruct_path(e,prev)
+        if j - 1 >= 0 and maze[i][j - 1] == WHITE:
+            q.appendleft(Coordinate(i, j - 1))
+            prev[(i, j - 1)] = (current.x, current.y)
+        if j + 1 < cols and maze[i][j + 1] == WHITE:
+            q.appendleft(Coordinate(i, j + 1))
+            prev[(i, j + 1)] = (current.x, current.y)
+        if i - 1 >= 0 and maze[i - 1][j] == WHITE:
+            q.appendleft(Coordinate(i - 1, j))
+            prev[(i - 1, j)] = (current.x, current.y)
+        if i + 1 < rows and maze[i + 1][j] == WHITE:
+            q.appendleft(Coordinate(i + 1, j))
+            prev[(i + 1, j)] = (current.x, current.y)
     return []
+
+def reconstruct_path(end, path):
+    result = []
+    last = (end.x, end.y)
+    while last != None:
+        result.append(Coordinate(last[0], last[1]))
+        last = path[last]
+    result.reverse()
+    return result
 
 
 def path_element_is_feasible(maze, prev, cur):
