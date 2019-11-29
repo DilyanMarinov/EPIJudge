@@ -1,5 +1,5 @@
 import functools
-
+from collections import deque
 from test_framework import generic_test
 from test_framework.test_utils import enable_executor_hook
 
@@ -9,11 +9,26 @@ class GraphVertex:
         self.d = -1
         self.edges = []
 
-
 def is_any_placement_feasible(graph):
-    # TODO - you fill in here.
-    return True
 
+    def bfs(start):
+        q = deque()
+        start.d = 0
+        q.append(start)
+        while len(q) > 0:
+            node = q.popleft()
+            for n in node.edges:
+                if n.d == -1:
+                    n.d = node.d + 1
+                    q.append(n)
+                elif n.d == node.d:
+                    return False
+        return True
+
+    for node in graph:
+        if node.d == -1 and not bfs(node):
+            return False
+    return True
 
 @enable_executor_hook
 def is_any_placement_feasible_wrapper(executor, k, edges):

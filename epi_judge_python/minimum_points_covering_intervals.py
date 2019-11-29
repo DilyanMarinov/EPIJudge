@@ -6,10 +6,22 @@ from test_framework.test_utils import enable_executor_hook
 
 Interval = collections.namedtuple('Interval', ('left', 'right'))
 
-
 def find_minimum_visits(intervals):
-    # TODO - you fill in here.
-    return 0
+    if len(intervals) == 0:
+        return 0
+    def getKey(interval):
+        return interval.right
+    intervals.sort(key=getKey)
+    current = intervals[0].right
+    points = [intervals[0].right]
+    for interval in intervals:
+        if current >= interval.left and current <= interval.right:
+            continue
+        else:
+            points.append(interval.right)
+            current = interval.right
+    print(points)
+    return len(points)
 
 
 @enable_executor_hook
